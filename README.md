@@ -6,7 +6,7 @@
 ## Tests
 To run tests, use `yarn test` after install all the relevant dependencies.
 
-NOTE: Tests will not work as expected since flash messages were plugged in for displaying error messages on the frontend. They are self explainatory though.
+NOTE: Tests will not work as expected since the JSON responses were replaced with flash messages and redirects for displaying error messages on the frontend. They are self explainatory though.
 
 ## Author
 Fabian Enos
