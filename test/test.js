@@ -2,20 +2,37 @@ var chai = require("chai");
 var chaiHttp = require("chai-http");
 
 var server = require("../index.js");
+var Users = require("../models/users");
 
 chai.use(chaiHttp);
 chai.should(); // Make chai use the should test methodology
 
 describe('API tests', () => {
-    var body, validBody;
+    var body, validBody, validLogin;
 
-    before(() => {
+    before((done) => {
         validBody = {
             email: "abc@gmail.in",
             name: "flexiple_rahul_jain",
             password: "PAss@@",
             passwordRepeat: "PAss@@",
         };
+
+        validLogin = {
+            email: "abc@gmail.in",
+            password: "PAss@@",
+        }
+
+        // Remove all the user so that we can run other tests
+        Users.remove({
+            email: validBody.email
+        }, function (err) {
+            if(err) {
+                process.exit(1);
+            } else {
+                done();
+            }
+        });
     })
 
     describe('POST /users/signup', () => {
@@ -97,7 +114,17 @@ describe('API tests', () => {
                 .send(validBody)
                 .end((err, res) => {
                     res.should.have.status(200);
-                    done();
+
+                    // Remove all the user so that we can run other tests
+                    Users.remove({
+                        email: validBody.email
+                    }, function (err) {
+                        if(err) {
+                            process.exit(1);
+                        } else {
+                            done();
+                        }
+                    });
                 });
             });
         });
@@ -243,7 +270,17 @@ describe('API tests', () => {
                 .send(body)
                 .end((err, res) => {
                     res.should.have.status(200);
-                    done();
+
+                    // Remove all the user so that we can run other tests
+                    Users.remove({
+                        email: validBody.email
+                    }, function (err) {
+                        if(err) {
+                            process.exit(1);
+                        } else {
+                            done();
+                        }
+                    });
                 });
             });
         });
@@ -327,7 +364,6 @@ describe('API tests', () => {
             });
 
             it('should succeed as the name is valid', (done) => {
-                body.name = "flexiple_rahul_jain";
                 chai.request(server)
                 .post('/users/signup')
                 .send(body)
@@ -336,6 +372,87 @@ describe('API tests', () => {
                     done();
                 });
             });
+
+            it('should fail since the user is duplicate', (done) => {
+                chai.request(server)
+                .post('/users/signup')
+                .send(body)
+                .end((err, res) => {
+                    res.should.have.status(403);
+                    done();
+                });
+            });
         });
     });
+
+    describe('POST /users/login', () => {
+        beforeEach(() => {
+            // Clone the valid body so we can test things independantly
+            // Reference: http://stackoverflow.com/questions/122102/what-is-the-most-efficient-way-to-deep-clone-an-object-in-javascript/5344074#5344074
+            body = JSON.parse(JSON.stringify(validLogin));
+        });
+
+        it('should fail due to missing body', (done) => {
+            chai.request(server)
+            .post('/users/login')
+            .end((err, res) => {
+                res.should.have.status(400);
+                done();
+            });
+        });
+
+        it('should fail due to missing password', (done) => {
+            delete body.password;
+            chai.request(server)
+            .post('/users/login')
+            .send(body)
+            .end((err, res) => {
+                res.should.have.status(400);
+                done();
+            });
+        });
+
+        it('should fail due to missing email', (done) => {
+            delete body.email;
+            chai.request(server)
+            .post('/users/login')
+            .send(body)
+            .end((err, res) => {
+                res.should.have.status(400);
+                done();
+            });
+        });
+
+        it('should fail due to empty email', (done) => {
+            body.email = "";
+            chai.request(server)
+            .post('/users/login')
+            .send(body)
+            .end((err, res) => {
+                res.should.have.status(400);
+                done();
+            });
+        });
+
+        it('should fail due to empty password', (done) => {
+            body.password = "";
+            chai.request(server)
+            .post('/users/login')
+            .send(body)
+            .end((err, res) => {
+                res.should.have.status(400);
+                done();
+            });
+        });
+
+        it('should succeed due to valid credentials', (done) => {
+            chai.request(server)
+            .post('/users/login')
+            .send(body)
+            .end((err, res) => {
+                res.should.have.status(200);
+                done();
+            });
+        });
+    })
 })

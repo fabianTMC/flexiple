@@ -10,11 +10,20 @@
     "mocha": "^3.3.0"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha"
+    "test": "./node_modules/mocha/bin/mocha",
+    "bower": "./node_modules/bower/bin/bower"
   },
   "dependencies": {
     "body-parser": "^1.17.1",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
     "express": "^4.15.2",
-    "express-validator": "^3.2.0"
+    "express-session": "^1.15.2",
+    "express-validator": "^3.2.0",
+    "jade": "^1.11.0",
+    "mongoose": "^4.9.6",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "pug": "^2.0.0-beta.12"
   }
 }

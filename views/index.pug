@@ -1,0 +1,31 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title Flexiple
+    link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', rel='stylesheet')
+    //if lt IE 9
+      script(src='https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js')
+      script(src='https://oss.maxcdn.com/respond/1.4.2/respond.min.js')
+  body
+    .container
+      div.pull-right
+        a(href="/signup") Register
+      form.form-signin(action='/users/login', method='post')
+        h2.form-signin-heading Please sign in
+        if errors
+          .alert.alert-danger(role='alert')
+            span.glyphicon.glyphicon-exclamation-sign(aria-hidden='true')
+            |
+            span= errors
+        |
+        label.sr-only(for='email') Email address
+        |
+        input#email.form-control(type='email', placeholder='Email address', required='', autofocus='', name='email')
+        |
+        label.sr-only(for='password') Password
+        |
+        input#password.form-control(type='password', placeholder='Password', required='', name='password')
+        button.btn.btn-lg.btn-primary.btn-block(type='submit') Sign in
