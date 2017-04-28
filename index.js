@@ -211,6 +211,11 @@ app.get('/login', isNotLoggedIn, function (req, res) {
 	res.render('index', { errors: req.flash('error')[0] })
 });
 
+app.get('/logout', function (req, res) {
+	req.logout();
+	res.redirect("/");
+});
+
 app.get('/signup', isNotLoggedIn, function (req, res) {
 	var messages = req.flash("error");
 	let errorMessage = "";
