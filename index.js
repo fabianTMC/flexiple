@@ -5,7 +5,7 @@ var expressSession = require('express-session');
 var expressValidator = require('express-validator');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/flexiple');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/flexiple');
 
 var passport = require("passport");
 var Strategy = require('passport-local').Strategy;
